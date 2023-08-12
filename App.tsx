@@ -7,46 +7,30 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {ActivityIndicator, StyleSheet, useColorScheme} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Provider} from 'react-redux';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import {PersistGate} from 'redux-persist/integration/react';
+import Navigator from './navigator';
+import {persistor, store} from './redux';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
+  // const {data: token} = useAsyncStorage('token');
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-  const Stack = createNativeStackNavigator();
-  const Home=()=>{
-    return <Text>Home</Text>
-  }
+
+  // console.log(data);
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='home'>
-        <Stack.Screen name="home" component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate
+        loading={<ActivityIndicator animating />}
+        persistor={persistor}>
+        <Navigator />
+      </PersistGate>
+    </Provider>
   );
 }
 
