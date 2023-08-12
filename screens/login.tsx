@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   ToastAndroid,
+  StyleSheet,
 } from 'react-native';
 import React from 'react';
 import {useForm} from 'react-hook-form';
@@ -14,6 +15,8 @@ import {
   PasswordInput,
 } from '../commonComponents/textInput';
 import {setLoggedInUser} from '../redux/slices/user';
+import useReduxData from '../hooks/redux';
+import {userType} from '../typescript/types';
 
 export default function Login({navigation}) {
   const {
@@ -21,14 +24,17 @@ export default function Login({navigation}) {
     handleSubmit,
     formState: {errors},
   } = useForm();
-  const {userList, loggedInUser} = useSelector(state => state.users);
+  const {users} = useReduxData();
+  const {userList, loggedInUser} = users;
   console.log('loggedInUser', loggedInUser);
   const dispatch = useDispatch();
-  const handleLogin = value => {
+  const handleLogin = (value: userType) => {
     const user = userList.find(item => item.email === value.email);
     if (user) {
       if (user.password === value.password) {
         dispatch(setLoggedInUser(user));
+      } else {
+        ToastAndroid.show('Password is incorrect', 3);
       }
     } else {
       ToastAndroid.show('User not found', 3);
@@ -56,7 +62,7 @@ export default function Login({navigation}) {
         </Text>
         <FormInput
           key="email"
-          style={{backgroundColor: 'grey', marginBottom: 20}}
+          style={styles.input}
           placeholder="Enter your email"
           control={control}
           name="email"
@@ -73,7 +79,7 @@ export default function Login({navigation}) {
         />
         <FormInput
           key="password"
-          style={{backgroundColor: 'grey', marginBottom: 20}}
+          style={styles.input}
           placeholder="Enter your password"
           control={control}
           name="password"
@@ -96,3 +102,12 @@ export default function Login({navigation}) {
     </View>
   );
 }
+
+export const styles = StyleSheet.create({
+  input: {
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: 2,
+    marginBottom: 20,
+  },
+});

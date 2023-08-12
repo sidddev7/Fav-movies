@@ -25,7 +25,7 @@ API.interceptors.response.use(
   res => {
     if (process.env.NODE_ENV === 'development') {
     }
-    return res;
+    return {...res, data: JSON.parse(res.data)};
   },
   err => {
     if (process.env.NODE_ENV === 'development') {

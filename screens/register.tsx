@@ -13,7 +13,11 @@ import {
   FormInput,
   PasswordInput,
 } from '../commonComponents/textInput';
-import {saveUser} from '../redux/slices/user';
+import {saveUser, setLoggedInUser} from '../redux/slices/user';
+import ReduxData from '../hooks/redux';
+import useReduxData from '../hooks/redux';
+import {userType} from '../typescript/types';
+import {styles} from './login';
 
 export default function Login({navigation}) {
   const {
@@ -21,12 +25,21 @@ export default function Login({navigation}) {
     handleSubmit,
     formState: {errors},
   } = useForm();
-  const {userList} = useSelector(state => state.users);
-  console.log(userList);
+  const {users} = useReduxData();
+  const {userList} = users;
   const dispatch = useDispatch();
-  const handleRegister = value => {
+  const handleRegister = (value: userType) => {
+    console.log(userList, value);
+    if (
+      userList.find(
+        item => item.email === value.email && item.userName === value.userName,
+      )
+    ) {
+      return ToastAndroid.show('User already exists', 3);
+    }
     dispatch(saveUser(value));
-    navigation.navigate('Home');
+    dispatch(setLoggedInUser(value));
+    navigation.navigate('homeMovies');
     ToastAndroid.show('Sign up successful', 3);
   };
   return (
@@ -51,7 +64,7 @@ export default function Login({navigation}) {
         </Text>
         <FormInput
           key="name"
-          style={{backgroundColor: 'grey', marginBottom: 20}}
+          style={styles.input}
           placeholder="Enter your name"
           control={control}
           name="name"
@@ -63,7 +76,7 @@ export default function Login({navigation}) {
         />
         <FormInput
           key="email"
-          style={{backgroundColor: 'grey', marginBottom: 20}}
+          style={styles.input}
           placeholder="Enter your email"
           control={control}
           name="email"
@@ -79,7 +92,7 @@ export default function Login({navigation}) {
         />
         <FormInput
           key="userName"
-          style={{backgroundColor: 'grey', marginBottom: 20}}
+          style={styles.input}
           placeholder="Enter your User Name"
           control={control}
           name="userName"
@@ -92,7 +105,7 @@ export default function Login({navigation}) {
 
         <FormInput
           key="password"
-          style={{backgroundColor: 'grey', marginBottom: 20}}
+          style={styles.input}
           placeholder="Enter your password"
           control={control}
           secure

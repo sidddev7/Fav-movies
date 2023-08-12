@@ -6,14 +6,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {Movie} from './Movie';
 import FAB from '../../commonComponents/fab';
 
-export default function Favorites({navigation}) {
+export default function WishList({navigation}) {
   const {users} = useReduxData();
-  const {likedMovies, loggedInUser} = users;
-  console.log(likedMovies);
+  const {wishListedMovies, loggedInUser} = users;
   return (
     <View style={{flex: 1}}>
       <FlatList
-        data={likedMovies}
+        data={wishListedMovies}
         numColumns={2}
         onEndReachedThreshold={0.75}
         // onEndReached={() =>
@@ -29,7 +28,7 @@ export default function Favorites({navigation}) {
               justifyContent: 'center',
             }}>
             <Text style={{textAlign: 'center', fontWeight: 'bold'}}>
-              No Favorites registered
+              No Wishlist registered
             </Text>
           </View>
         }

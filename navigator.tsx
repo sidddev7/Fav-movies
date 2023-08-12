@@ -1,53 +1,27 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import SplashScreen from './screens/splash';
 import {Home} from './Home';
 import Login from './screens/login';
 import Register from './screens/register';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {Text} from 'react-native';
 import isEmpty from 'lodash/isEmpty';
 import {logOutUser} from './redux/slices/user';
+import useReduxData from './hooks/redux';
+import {TextInput} from 'react-native';
+import {FormInput} from './commonComponents/textInput';
+import {setSearch} from './redux/slices/movies';
+import Favorites from './screens/movies/favorites';
+import MovieDetails from './screens/movies/movieDetails';
 
 export default function Navigator() {
-  const {loggedInUser} = useSelector(state => state.users);
-  const dispatch = useDispatch();
+  const {users} = useReduxData();
+  const {loggedInUser} = users;
   const Stack = createNativeStackNavigator();
-  const Header = props => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '100%',
-          marginLeft: -10,
-          paddingVertical: 10,
-          paddingRight: 5,
-        }}>
-        <Text style={{fontWeight: 'bold', fontSize: 16}}>
-          {!isEmpty(loggedInUser)
-            ? `Hello @${loggedInUser.userName} `
-            : 'Hello'}
-        </Text>
-        {!isEmpty(loggedInUser) ? (
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(logOutUser());
-            }}>
-            <Icon name="logout" style={{fontSize: 16}} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => props.navigation.navigate('Login')}>
-            <Icon name="login" style={{fontSize: 16}} />
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="splash">
@@ -58,13 +32,19 @@ export default function Navigator() {
         />
         <Stack.Screen
           name="Home"
-          options={props => ({
-            headerTitle: titleProps => <Header {...props} {...titleProps} />,
-          })}
+          options={{headerShown: false}}
           component={Home}
         />
         {!isEmpty(loggedInUser) ? (
-          <></>
+          <>
+            <Stack.Screen
+              name="Details"
+              options={props => ({
+                title: props.route.params.movie.title,
+              })}>
+              {props => <MovieDetails {...props} />}
+            </Stack.Screen>
+          </>
         ) : (
           <>
             <Stack.Screen name="Login" component={Login} />

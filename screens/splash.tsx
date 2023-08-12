@@ -4,9 +4,11 @@ import React, {useEffect} from 'react';
 import Loader from '../commonComponents/loader';
 import {useDispatch, useSelector} from 'react-redux';
 import useAsyncStorage from '../hooks/useAsyncStorage';
+import useReduxData from '../hooks/redux';
 
 export default function SplashScreen({navigation}: any) {
-  const {loggedInUser} = useSelector(state => state.users);
+  const {users} = useReduxData();
+  const {loggedInUser} = users;
   async function prepare() {
     try {
       loggedInUser
