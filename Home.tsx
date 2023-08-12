@@ -3,6 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import isEmpty from 'lodash/isEmpty';
 import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeMovies from './screens/movies/home';
 import Favorites from './screens/movies/favorites';
@@ -10,6 +11,7 @@ import useReduxData, {useDispatcher} from './hooks/redux';
 import {setSearch} from './redux/slices/movies';
 import {logOutUser} from './redux/slices/user';
 import WishList from './screens/movies/wishList';
+import {TextInput} from 'react-native';
 
 export const Home = ({navigation}) => {
   const Tab = createBottomTabNavigator();
@@ -79,7 +81,7 @@ export const Home = ({navigation}) => {
         ) : (
           <View
             style={{
-              flex: 1,
+              width: '100%',
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -87,7 +89,7 @@ export const Home = ({navigation}) => {
             <TextInput
               placeholder="Search Movies"
               style={{
-                width: '90%',
+                width: '100%',
                 borderColor: 'grey',
                 borderStyle: 'solid',
                 borderBottomWidth: 2,
@@ -114,21 +116,39 @@ export const Home = ({navigation}) => {
         <Tab.Screen
           name="homeMovies"
           options={props => ({
+            title: 'Home',
             headerTitle: titleProps => <Header {...props} {...titleProps} />,
+            tabBarIcon: props => <Icon name="home" size={24} />,
           })}>
           {props => <HomeMovies {...props} />}
         </Tab.Screen>
         {!isEmpty(loggedInUser) && (
           <>
-            <Tab.Screen name="Favorites" options={{headerShown: true}}>
+            <Tab.Screen
+              name="Favorites"
+              options={{
+                headerShown: true,
+                tabBarIcon: props => <Icon name="heart" size={24} />,
+              }}>
               {props => <Favorites {...props} />}
             </Tab.Screen>
-            <Tab.Screen name="WishList" options={{headerShown: true}}>
+            <Tab.Screen
+              name="WishList"
+              options={{
+                headerShown: true,
+
+                tabBarIcon: props => (
+                  <EntypoIcon
+                    name="back-in-time"
+                    size={24}
+                    // color={props.item.isWishListed ? 'red' : 'grey'}
+                  />
+                ),
+              }}>
               {props => <WishList {...props} />}
             </Tab.Screen>
           </>
         )}
-        {/* <Tab.Screen></Tab.Screen> */}
       </Tab.Navigator>
     </View>
   );

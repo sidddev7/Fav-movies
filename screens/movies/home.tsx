@@ -30,8 +30,7 @@ export default function HomeMovies({navigation}) {
   const dispatch = useDispatch();
   const {movies} = useReduxData();
   const {moviesList, search} = movies;
-  console.log(moviesList);
-  console.log(moviesList);
+  console.log(variables);
   const fetchData = async () => {
     try {
       setmisc({...misc, listLoading: true});
@@ -44,6 +43,7 @@ export default function HomeMovies({navigation}) {
           list: res.data.results,
           favoriteMovies: likedMovies,
           wishListed: wishListedMovies,
+          isAppend: true,
         }),
       );
       setmisc({...misc, listLoading: false});
@@ -59,6 +59,7 @@ export default function HomeMovies({navigation}) {
         list: res.data.results,
         favoriteMovies: likedMovies,
         wishListed: wishListedMovies,
+        isAppend: false,
       }),
     );
     setmisc({...misc, listLoading: false});
@@ -81,7 +82,7 @@ export default function HomeMovies({navigation}) {
         numColumns={numColumns}
         onEndReachedThreshold={0.75}
         onEndReached={() =>
-          setvariables({...variables, pageSize: variables.pageSize + 1})
+          setvariables({...variables, page: variables.page + 1})
         }
         onRefresh={() => fetchData()}
         ListEmptyComponent={

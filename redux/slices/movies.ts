@@ -43,25 +43,34 @@ const movieSlice = createSlice({
           list: moviesType[];
           favoriteMovies: moviesType[];
           wishListed: moviesType[];
+          isAppend: boolean;
         };
       },
     ) {
-      const {list, favoriteMovies, wishListed} = action.payload;
+      const {list, favoriteMovies, wishListed, isAppend} = action.payload;
       if (favoriteMovies.length > 0 || wishListed.length > 0) {
         const updatedList = markFavorites(list, favoriteMovies, wishListed);
-        state.moviesList = updatedList;
+        if (isAppend) {
+          state.moviesList = [...state.moviesList, ...updatedList];
+        } else {
+          state.moviesList = updatedList;
+        }
       } else {
-        state.moviesList = list;
+        state.moviesList = list.map(item => ({
+          ...item,
+          isFavorite: false,
+          isWishListed: false,
+        }));
       }
     },
     setSearch(state, action) {
       state.search = action.payload;
     },
     addFavorite(state, action) {
-      console.log(action.payload);
       const movieIndex = state.moviesList.findIndex(
         (movie: moviesType) => movie.id === action.payload,
       );
+      console.log('action.payload, movieIndex', action.payload, movieIndex);
       if (movieIndex !== -1) {
         state.moviesList[movieIndex] = {
           ...state.moviesList[movieIndex],

@@ -20,7 +20,9 @@ export default function WishList({navigation}) {
         // }
         // onRefresh={() => fetchData()}
         // refreshing={misc.listLoading}
-        renderItem={props => <Movie {...props} user={loggedInUser} />}
+        renderItem={props => (
+          <Movie {...props} user={loggedInUser} navigation={navigation} />
+        )}
         ListEmptyComponent={
           <View
             style={{

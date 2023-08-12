@@ -21,7 +21,9 @@ export default function Favorites({navigation}) {
         // }
         // onRefresh={() => fetchData()}
         // refreshing={misc.listLoading}
-        renderItem={props => <Movie {...props} user={loggedInUser} />}
+        renderItem={props => (
+          <Movie {...props} user={loggedInUser} navigation={navigation} />
+        )}
         ListEmptyComponent={
           <View
             style={{
