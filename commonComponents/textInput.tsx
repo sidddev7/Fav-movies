@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller} from 'react-hook-form';
 import {
   StyleProp,
@@ -7,10 +7,10 @@ import {
   TextInput,
   TextStyle,
   View,
-  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // You can choose your preferred icon library
+import TextBox from 'react-native-password-eye';
+import {colors} from '../colors';
 
 interface formInput {
   label?: string;
@@ -36,7 +36,7 @@ export const FormInput = ({
 }: formInput) => {
   return (
     <View>
-      <Text>
+      <Text style={{color: colors.secondary2}}>
         {label || 'No Label'}
         {rules.required && <Text style={{color: 'red'}}>*</Text>}
       </Text>
@@ -47,8 +47,9 @@ export const FormInput = ({
         render={({field}) => {
           return (
             <TextInput
+              placeholderTextColor={colors.secondary2}
               secureTextEntry={secure}
-              style={style}
+              style={{...style, color: colors.secondary2}}
               placeholder={placeholder}
               multiline
               // w="100%"
@@ -75,16 +76,9 @@ export const PasswordInput = ({
   style,
   secure = false,
 }: formInput) => {
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   return (
     <View>
-      <Text>
+      <Text style={{color: colors.secondary2}}>
         {label || 'No Label'}
         {rules.required && <Text style={{color: 'red'}}>*</Text>}
       </Text>
@@ -94,26 +88,15 @@ export const PasswordInput = ({
         name={name}
         render={({field}) => {
           return (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <TextInput
-                secureTextEntry
-                style={{...style, backgroundColor: 'blue', width: '80%'}}
-                placeholder={placeholder}
-                multiline
-                onChangeText={field.onChange}
-                value={field.value}
-              />
-              <Icon
-                name={showPassword ? 'eye-slash' : 'eye'}
-                size={20}
-                color="gray"
-              />
-            </View>
+            <TextBox
+              inputStyle={{color: colors.secondary2}}
+              eyeColor={colors.secondary2}
+              secureTextEntry
+              placeholderTextColor={colors.secondary2}
+              containerStyles={style}
+              placeholder={placeholder}
+              onChangeText={field.onChange}
+            />
           );
         }}
       />

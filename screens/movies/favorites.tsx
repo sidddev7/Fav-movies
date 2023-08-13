@@ -8,12 +8,13 @@ import FAB from '../../commonComponents/fab';
 
 export default function Favorites({navigation}) {
   const {users} = useReduxData();
-  const {likedMovies, loggedInUser} = users;
-  console.log(likedMovies);
+  const {loggedInUser, myMovies} = users;
   return (
     <View style={{flex: 1}}>
       <FlatList
-        data={likedMovies}
+        data={myMovies.filter(
+          movie => movie.isFavorite && movie.userId === loggedInUser.id,
+        )}
         numColumns={2}
         onEndReachedThreshold={0.75}
         // onEndReached={() =>

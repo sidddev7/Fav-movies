@@ -12,6 +12,7 @@ import {setSearch} from './redux/slices/movies';
 import {logOutUser} from './redux/slices/user';
 import WishList from './screens/movies/wishList';
 import {TextInput} from 'react-native';
+import {colors} from './colors';
 
 export const Home = ({navigation}) => {
   const Tab = createBottomTabNavigator();
@@ -47,11 +48,18 @@ export const Home = ({navigation}) => {
         }}>
         {!isSearch.visible ? (
           <>
-            <Text style={{fontWeight: 'bold', fontSize: 16}}>
-              {!isEmpty(loggedInUser)
-                ? `Hello @${loggedInUser.userName} `
-                : 'Hello'}
-            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                isEmpty(loggedInUser)
+                  ? navigation.navigate('Login')
+                  : navigation.navigate('UserDetails')
+              }>
+              <Text style={{fontWeight: 'bold', fontSize: 16}}>
+                {!isEmpty(loggedInUser)
+                  ? `Hello @${loggedInUser.userName} `
+                  : 'Hello'}
+              </Text>
+            </TouchableOpacity>
             <View
               style={{
                 flexDirection: 'row',
@@ -115,6 +123,7 @@ export const Home = ({navigation}) => {
       <Tab.Navigator>
         <Tab.Screen
           name="homeMovies"
+          key="homeMovies"
           options={props => ({
             title: 'Home',
             headerTitle: titleProps => <Header {...props} {...titleProps} />,
@@ -126,17 +135,16 @@ export const Home = ({navigation}) => {
           <>
             <Tab.Screen
               name="Favorites"
+              key="favorites"
               options={{
-                headerShown: true,
                 tabBarIcon: props => <Icon name="heart" size={24} />,
               }}>
               {props => <Favorites {...props} />}
             </Tab.Screen>
             <Tab.Screen
               name="WishList"
+              key="wishList"
               options={{
-                headerShown: true,
-
                 tabBarIcon: props => (
                   <EntypoIcon
                     name="back-in-time"

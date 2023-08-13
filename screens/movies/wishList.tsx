@@ -8,11 +8,13 @@ import FAB from '../../commonComponents/fab';
 
 export default function WishList({navigation}) {
   const {users} = useReduxData();
-  const {wishListedMovies, loggedInUser} = users;
+  const {myMovies, loggedInUser} = users;
   return (
     <View style={{flex: 1}}>
       <FlatList
-        data={wishListedMovies}
+        data={myMovies.filter(
+          movie => movie.isWishListed && movie.userId === loggedInUser.id,
+        )}
         numColumns={2}
         onEndReachedThreshold={0.75}
         // onEndReached={() =>

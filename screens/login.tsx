@@ -17,6 +17,7 @@ import {
 import {setLoggedInUser} from '../redux/slices/user';
 import useReduxData from '../hooks/redux';
 import {userType} from '../typescript/types';
+import {colors} from '../colors';
 
 export default function Login({navigation}) {
   const {
@@ -43,21 +44,28 @@ export default function Login({navigation}) {
   return (
     <View
       style={{
-        backgroundColor: 'red',
+        backgroundColor: colors.primary,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
       <View
         style={{
-          backgroundColor: 'white',
+          borderColor: colors.secondary2,
           minHeight: 300,
           minWidth: 300,
           borderRadius: 15,
           padding: 10,
+          borderWidth: 2,
         }}>
         <Text
-          style={{textAlign: 'center', fontWeight: 'bold', marginBottom: 20}}>
+          style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            marginBottom: 20,
+            fontSize: 25,
+            color: colors.secondary2,
+          }}>
           Login
         </Text>
         <FormInput
@@ -77,7 +85,7 @@ export default function Login({navigation}) {
           }}
           errorMessage={'Please enter your email'}
         />
-        <FormInput
+        <PasswordInput
           key="password"
           style={styles.input}
           placeholder="Enter your password"
@@ -89,12 +97,24 @@ export default function Login({navigation}) {
           errorMessage={'Please enter your password'}
         />
         <TouchableOpacity onPress={handleSubmit(handleLogin)}>
-          <View style={{backgroundColor: 'blue', padding: 10, marginTop: 10}}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Login</Text>
+          <View
+            style={{
+              backgroundColor: colors.secondary2,
+              padding: 10,
+              marginTop: 10,
+            }}>
+            <Text style={{color: colors.primary, textAlign: 'center'}}>
+              Login
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={{textAlign: 'center', marginTop: 20}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              marginTop: 20,
+              color: colors.secondary2,
+            }}>
             New to app? Register
           </Text>
         </TouchableOpacity>
@@ -105,7 +125,7 @@ export default function Login({navigation}) {
 
 export const styles = StyleSheet.create({
   input: {
-    borderColor: 'grey',
+    borderColor: colors.secondary2,
     borderStyle: 'solid',
     borderBottomWidth: 2,
     marginBottom: 20,

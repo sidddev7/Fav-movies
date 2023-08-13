@@ -14,6 +14,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import Navigator from './navigator';
 import {persistor, store} from './redux';
+import SplashScreen from './screens/splash';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -25,9 +26,7 @@ function App(): JSX.Element {
   // console.log(data);
   return (
     <Provider store={store}>
-      <PersistGate
-        loading={<ActivityIndicator animating />}
-        persistor={persistor}>
+      <PersistGate loading={<SplashScreen />} persistor={persistor}>
         <Navigator />
       </PersistGate>
     </Provider>

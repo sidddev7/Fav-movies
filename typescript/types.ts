@@ -5,7 +5,7 @@ export type RootStackParamList = {
 };
 
 export type userType = {
-  id: string | Number;
+  id: number;
   email: string;
   password: string;
   userName: string;
@@ -26,11 +26,11 @@ export type moviesListMetaData = {
   total_pages: number;
   total_results: number;
 };
+export type myMovies = moviesType & {userId: number};
 export type users = {
   loggedInUser: userType | {};
   userList: userType[];
-  likedMovies: moviesType[];
-  wishListedMovies: moviesType[];
+  myMovies: myMovies[];
 };
 export type movies = {
   moviesList: moviesListMetaData & {

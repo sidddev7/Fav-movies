@@ -11,13 +11,8 @@ import {
 } from '../../redux/slices/movies';
 import {moviesType, userType} from '../../typescript/types';
 import {useDispatcher} from '../../hooks/redux';
-import {
-  addMovie,
-  addWishListMovie,
-  removeMovie,
-  removeWishlistMovie,
-} from '../../redux/slices/user';
 import {styles} from './home';
+import {addToList, removeFromList} from '../../redux/slices/user';
 
 export const Movie = (props: {
   navigation: any;
@@ -27,11 +22,10 @@ export const Movie = (props: {
   const dispatch = useDispatcher();
   const handleAdd = (item: moviesType, type: 'favorite' | 'wishlist') => {
     try {
+      dispatch(addToList({item: item, type: type, user: props.user}));
       if (type === 'favorite') {
-        dispatch(addMovie(item));
         dispatch(addFavorite(item.id));
       } else {
-        dispatch(addWishListMovie(item));
         dispatch(addWishList(item.id));
       }
     } catch (err) {
@@ -40,11 +34,12 @@ export const Movie = (props: {
   };
   const handleRemove = (item: moviesType, type: 'favorite' | 'wishlist') => {
     try {
+      dispatch(
+        removeFromList({movieId: item.id, type: type, userId: props.user.id}),
+      );
       if (type === 'favorite') {
-        dispatch(removeMovie(item));
         dispatch(removeFavorite(item));
       } else {
-        dispatch(removeWishlistMovie(item));
         dispatch(removeWishList(item));
       }
     } catch (err) {
@@ -53,7 +48,12 @@ export const Movie = (props: {
   };
   return (
     <TouchableOpacity
-      onPress={() => props.navigation.navigate('Details', {movie: props.item})}>
+      onPress={() =>
+        props.navigation.navigate('Details', {
+          movieId: props.item.id,
+          movie: props.item,
+        })
+      }>
       <View style={styles.itemContainer}>
         <Image
           source={{
@@ -98,7 +98,9 @@ export const Movie = (props: {
           </>
         )}
         <Text style={styles.itemText}>{props.item.title}</Text>
-        <Text>{props.item.overview.slice(0, 30)}...</Text>
+        <Text style={{color: 'white'}}>
+          {props.item.overview.slice(0, 30)}...
+        </Text>
       </View>
     </TouchableOpacity>
   );

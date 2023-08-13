@@ -16,6 +16,7 @@ import {FormInput} from './commonComponents/textInput';
 import {setSearch} from './redux/slices/movies';
 import Favorites from './screens/movies/favorites';
 import MovieDetails from './screens/movies/movieDetails';
+import UserDetails from './screens/userDetails';
 
 export default function Navigator() {
   const {users} = useReduxData();
@@ -35,20 +36,34 @@ export default function Navigator() {
           options={{headerShown: false}}
           component={Home}
         />
+        <Stack.Screen
+          name="Details"
+          options={props => ({
+            headerShown: false,
+            title: props.route.params.movie.title,
+          })}>
+          {props => <MovieDetails {...props} />}
+        </Stack.Screen>
         {!isEmpty(loggedInUser) ? (
           <>
             <Stack.Screen
-              name="Details"
-              options={props => ({
-                title: props.route.params.movie.title,
-              })}>
-              {props => <MovieDetails {...props} />}
-            </Stack.Screen>
+              options={{headerShown: false}}
+              name="UserDetails"
+              component={UserDetails}
+            />
           </>
         ) : (
           <>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen
+              name="Login"
+              options={{headerShown: false}}
+              component={Login}
+            />
+            <Stack.Screen
+              name="Register"
+              options={{headerShown: false}}
+              component={Register}
+            />
           </>
         )}
       </Stack.Navigator>

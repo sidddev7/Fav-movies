@@ -18,6 +18,7 @@ import ReduxData from '../hooks/redux';
 import useReduxData from '../hooks/redux';
 import {userType} from '../typescript/types';
 import {styles} from './login';
+import {colors} from '../colors';
 
 export default function Login({navigation}) {
   const {
@@ -38,28 +39,35 @@ export default function Login({navigation}) {
       return ToastAndroid.show('User already exists', 3);
     }
     dispatch(saveUser(value));
-    dispatch(setLoggedInUser(value));
+    // dispatch(setLoggedInUser(value));
     navigation.navigate('homeMovies');
     ToastAndroid.show('Sign up successful', 3);
   };
   return (
     <View
       style={{
-        backgroundColor: 'red',
+        backgroundColor: colors.primary,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
       <View
         style={{
-          backgroundColor: 'white',
+          borderColor: colors.secondary2,
           minHeight: 300,
           minWidth: 300,
           borderRadius: 15,
           padding: 10,
+          borderWidth: 2,
         }}>
         <Text
-          style={{textAlign: 'center', fontWeight: 'bold', marginBottom: 20}}>
+          style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            marginBottom: 20,
+            color: colors.secondary2,
+            fontSize: 25,
+          }}>
           Register
         </Text>
         <FormInput
@@ -103,7 +111,7 @@ export default function Login({navigation}) {
           }}
         />
 
-        <FormInput
+        <PasswordInput
           key="password"
           style={styles.input}
           placeholder="Enter your password"
@@ -115,12 +123,24 @@ export default function Login({navigation}) {
           rules={{required: 'Password is required'}}
         />
         <TouchableOpacity onPress={handleSubmit(handleRegister)}>
-          <View style={{backgroundColor: 'blue', padding: 10, marginTop: 10}}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Register</Text>
+          <View
+            style={{
+              backgroundColor: colors.secondary2,
+              padding: 10,
+              marginTop: 10,
+            }}>
+            <Text style={{color: colors.primary, textAlign: 'center'}}>
+              Register
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={{textAlign: 'center', marginTop: 20}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              marginTop: 20,
+              color: colors.secondary2,
+            }}>
             Already have an account? Login
           </Text>
         </TouchableOpacity>

@@ -7,6 +7,7 @@ import {RootReducerState} from '../../typescript/types';
 import useReduxData from '../../hooks/redux';
 import {Movie} from './Movie';
 import {Text} from 'react-native';
+import {colors} from '../../colors';
 
 const {width} = Dimensions.get('window');
 const numColumns = 2;
@@ -18,14 +19,16 @@ interface miscTypes {
 interface variableTypes {
   page: number;
   pageSize: number;
+  isAppend: boolean;
 }
 export default function HomeMovies({navigation}) {
   const {users} = useReduxData();
-  const {loggedInUser, likedMovies, wishListedMovies} = users;
+  const {loggedInUser, myMovies} = users;
   const [misc, setmisc] = useState<miscTypes>({listLoading: true});
   const [variables, setvariables] = useState<variableTypes>({
     page: 1,
     pageSize: 20,
+    isAppend: false,
   });
   const dispatch = useDispatch();
   const {movies} = useReduxData();
@@ -41,9 +44,9 @@ export default function HomeMovies({navigation}) {
       dispatch(
         setMovies({
           list: res.data.results,
-          favoriteMovies: likedMovies,
-          wishListed: wishListedMovies,
-          isAppend: true,
+          myMovies: myMovies,
+          isAppend: variables.isAppend,
+          userId: loggedInUser.id,
         }),
       );
       setmisc({...misc, listLoading: false});
@@ -57,9 +60,9 @@ export default function HomeMovies({navigation}) {
     dispatch(
       setMovies({
         list: res.data.results,
-        favoriteMovies: likedMovies,
-        wishListed: wishListedMovies,
+        myMovies: myMovies,
         isAppend: false,
+        userId: loggedInUser.id,
       }),
     );
     setmisc({...misc, listLoading: false});
@@ -75,14 +78,15 @@ export default function HomeMovies({navigation}) {
       fetchData();
     }
   }, [search]);
+  console.log('movies', movies);
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: colors.primary}}>
       <FlatList
         data={moviesList}
         numColumns={numColumns}
         onEndReachedThreshold={0.75}
         onEndReached={() =>
-          setvariables({...variables, page: variables.page + 1})
+          setvariables({...variables, page: variables.page + 1, isAppend: true})
         }
         onRefresh={() => fetchData()}
         ListEmptyComponent={
@@ -97,8 +101,13 @@ export default function HomeMovies({navigation}) {
           </View>
         }
         refreshing={misc.listLoading}
-        renderItem={props => (
-          <Movie {...props} navigation={navigation} user={loggedInUser} />
+        renderItem={({item, index}) => (
+          <Movie
+            item={item}
+            key={item.id}
+            navigation={navigation}
+            user={loggedInUser}
+          />
         )}
         keyExtractor={item => item.id}
       />
@@ -113,6 +122,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'gray',
+    backgroundColor: colors.primary2,
   },
   posterImage: {
     width: '100%',
@@ -122,6 +132,7 @@ export const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: colors.secondary2,
   },
   likeIconContainer: {
     position: 'absolute',
